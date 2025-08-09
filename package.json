@@ -1,0 +1,13 @@
+{
+  "name": "shyftoff",
+  "version": "1.0.0",
+  "description": "Code challenge for ShyftOff. Build an App to manage Agents and view Campaigns.",
+  "main": "index.js",
+  "workspaces": [
+    "client/*",
+    "database/*",
+    "server/*"
+  ],
+  "author": "Myron R Schippers Jr <dubtwee@gmail.com>",
+  "license": "MIT"
+}
