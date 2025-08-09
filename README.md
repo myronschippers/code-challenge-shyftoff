@@ -1,69 +1,55 @@
-# React + TypeScript + Vite
+# Agents and Campaigns Code Challenge
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a code challenge dealing with a sample DB in [SQLite](https://sqlite.org/) dealing with Agents and Campaigns. Using a provided [SQLite database](./database/shyftoff.db), the build will be for a simple web-based application that fulfills following user stories:
 
-Currently, two official plugins are available:
+1. As a ShyftOff admin user, I need to manage the agents’ properties and campaign
+assignments in a single UI.
+2. As a ShyftOff customer user, I want to see my campaign and dashboard of KPIs:
+    1. Hours worked, grouped by day, week, and month.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+UI should feature responsive design. Bonus for animation or gamification elements incorporated
+into the customer dashboard.
 
-## Expanding the ESLint configuration
+Clarified points:
+- the tech stack is completely open
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech Stack
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+For the sake of speed the following stack will be used for the project.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- Database
+    - SQLite
+- Backend
+    - Node
+    - Express
+    - SQLite3
+    - Typescript
+- Front-end
+    - React
+    - Typescript
+    - react-query
+    - Material UI
+    - Vite
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+
+## Installation
+
+Node version is managed with `nvm` and the `.nvmrc` can be used to install and use the appropriate version.
+
+- [Install `nvm`](https://github.com/nvm-sh/nvm)
+
+Update Node to the project version with the command below.
+
+```bash
+nvm use
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+**TODO: Add client and server installation documentation**
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Usage
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+**TODO: Add client and server usage documentation**
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
