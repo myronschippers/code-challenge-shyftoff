@@ -1,55 +1,69 @@
-# Agents and Campaigns Code Challenge
+# React + TypeScript + Vite
 
-This is a code challenge dealing with a sample DB in [SQLite](https://sqlite.org/) dealing with Agents and Campaigns. Using a provided [SQLite database](./database/shyftoff.db), the build will be for a simple web-based application that fulfills following user stories:
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-1. As a ShyftOff admin user, I need to manage the agents’ properties and campaign
-assignments in a single UI.
-2. As a ShyftOff customer user, I want to see my campaign and dashboard of KPIs:
-    1. Hours worked, grouped by day, week, and month.
+Currently, two official plugins are available:
 
-UI should feature responsive design. Bonus for animation or gamification elements incorporated
-into the customer dashboard.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-Clarified points:
-- the tech stack is completely open
+## Expanding the ESLint configuration
 
-## Tech Stack
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-For the sake of speed the following stack will be used for the project.
+```js
+export default tseslint.config([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-- Database
-    - SQLite
-- Backend
-    - Node
-    - Express
-    - SQLite3
-    - Typescript
-- Front-end
-    - React
-    - Typescript
-    - react-query
-    - Material UI
-    - Vite
+      // Remove tseslint.configs.recommended and replace with this
+      ...tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      ...tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      ...tseslint.configs.stylisticTypeChecked,
 
-
-## Installation
-
-Node version is managed with `nvm` and the `.nvmrc` can be used to install and use the appropriate version.
-
-- [Install `nvm`](https://github.com/nvm-sh/nvm)
-
-Update Node to the project version with the command below.
-
-```bash
-nvm use
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
-**TODO: Add client and server installation documentation**
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-## Usage
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-**TODO: Add client and server usage documentation**
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
+export default tseslint.config([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
