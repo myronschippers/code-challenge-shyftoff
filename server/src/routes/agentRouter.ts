@@ -82,4 +82,47 @@ router.post(
   }
 );
 
+/**
+ * POST route to add a new agent to the `agent` table
+ */
+router.put(
+  '/:agentId',
+  (req: Request, res: Response, next: express.NextFunction): void => {
+    try {
+      const query = `UPDATE agent
+        SET first_name = ?, last_name = ?, email = ?, is_active = ?
+        WHERE id = ?;`;
+      const { agentId } = req.params;
+      const { first_name, last_name, email, is_active } = req.body;
+
+      // Validate required fields
+      if (
+        !first_name ||
+        !last_name ||
+        !email ||
+        typeof is_active === 'boolean'
+      ) {
+        res.status(400).json({ error: 'Missing required fields' });
+        return;
+      }
+
+      DB.run(
+        query,
+        [first_name, last_name, email, is_active ? 1 : 0, agentId],
+        (err: Error, rows: { id: number }[]) => {
+          if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+          }
+          res.status(200).json({ agent: rows });
+        }
+      );
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: { message: 'Internal Server Error', info: error } });
+    }
+  }
+);
+
 export { router as agentRouter };
