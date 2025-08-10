@@ -1,27 +1,22 @@
 import express, { type Request, type Response } from 'express';
+import bodyParser from 'body-parser';
 
-import DB from './db_connect';
+import { agentRouter } from './routes/agentRouter';
 
 const app = express();
+
+// Body parser middleware
+// ----------
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (_req: Request, res: Response) => {
   res.send('Hello World!');
 });
 
-app.get('/api/agents', (_req: Request, res: Response) => {
-  try {
-    DB.all('SELECT * FROM agent', [], (err, rows) => {
-      if (err) {
-        res.status(500).json({ error: err.message });
-        return;
-      }
-      res.status(200).json({ agents: rows });
-    });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: { message: 'Internal Server Error', info: error } });
-  }
-});
+// Routes
+// ----------
+const BASE_API_URL = '/api';
+app.use(`${BASE_API_URL}/agents`, agentRouter);
 
 export default app;
