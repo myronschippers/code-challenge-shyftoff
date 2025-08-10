@@ -5,7 +5,7 @@ import DB from '../db_connect';
 const router: express.Router = express.Router();
 
 /**
- * GET route template
+ * GET All Agents from the `agent` table
  */
 router.get(
   '/',
@@ -27,13 +27,28 @@ router.get(
 );
 
 /**
- * POST route template
+ * GET a single Agent from the `agent` table
  */
-router.post(
-  '/',
-  (req: Request, res: Response, next: express.NextFunction): void => {
-    // POST route code here
+router.get('/:agentId', (req: Request, res: Response): void => {
+  try {
+    const query = 'SELECT * FROM agent WHERE id = ?';
+    DB.all(query, [req.params.agentId], (err, rows) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+
+      if (rows.length === 0) {
+        res.status(404).json({ error: 'Agent not found' });
+        return;
+      }
+      res.status(200).json(rows[0]);
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: { message: 'Internal Server Error', info: error } });
   }
-);
+});
 
 export { router as agentRouter };
