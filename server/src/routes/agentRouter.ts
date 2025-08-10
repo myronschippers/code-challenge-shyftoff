@@ -51,4 +51,35 @@ router.get('/:agentId', (req: Request, res: Response): void => {
   }
 });
 
+/**
+ * POST route to add a new agent to the `agent` table
+ */
+router.post(
+  '/',
+  (req: Request, res: Response, next: express.NextFunction): void => {
+    const query = `INSERT INTO agent(first_name, last_name, email)
+      VALUES(?, ?, ?)
+      RETURNING id;`;
+
+    try {
+      const { first_name, last_name, email } = req.body;
+      DB.run(
+        query,
+        [first_name, last_name, email],
+        (err: Error, rows: { id: number }[]) => {
+          if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+          }
+          res.status(200).json({ agent: rows });
+        }
+      );
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: { message: 'Internal Server Error', info: error } });
+    }
+  }
+);
+
 export { router as agentRouter };
