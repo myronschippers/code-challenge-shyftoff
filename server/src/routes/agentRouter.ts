@@ -9,15 +9,40 @@ const router: express.Router = express.Router();
  */
 router.get(
   '/',
-  (_req: Request, res: Response, _next: express.NextFunction): void => {
+  (req: Request, res: Response, _next: express.NextFunction): void => {
+    const page = req.query.page ? parseInt(req.query.page as string) : 1; // Current page, default to 1
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10; // Items per page, default to 10
+    const offset = (page - 1) * limit; // Calculate the offset
+
     try {
-      DB.all('SELECT * FROM agent', [], (err, rows) => {
-        if (err) {
-          res.status(500).json({ error: err.message });
-          return;
+      DB.get<{ totalItems: number }>(
+        'SELECT COUNT(*) AS totalItems FROM agent;',
+        (err, countRows) => {
+          if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+          }
+          const totalItems = countRows.totalItems;
+          const totalPages = Math.ceil(totalItems / limit);
+
+          DB.all(
+            'SELECT * FROM agent LIMIT ? OFFSET ?;',
+            [limit, offset],
+            (err, rows) => {
+              if (err) {
+                res.status(500).json({ error: err.message });
+                return;
+              }
+              res
+                .status(200)
+                .json({
+                  agents: rows,
+                  pager: { limit, offset, page, totalItems, totalPages },
+                });
+            }
+          );
         }
-        res.status(200).json({ agents: rows });
-      });
+      );
     } catch (error) {
       res
         .status(500)
