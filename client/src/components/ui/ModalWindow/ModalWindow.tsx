@@ -28,8 +28,9 @@ const ModalWindow: FC<ModalWindowProps> = ({
         border: '1px solid #000',
         boxShadow: 24,
         borderRadius: 6,
-        width: 500,
+        width: { xs: '90vw', md: 500 },
         overflow: 'hidden',
+        maxHeight: '80vh',
         zIndex: 1300,
       }}
     >
@@ -53,7 +54,7 @@ const ModalWindow: FC<ModalWindowProps> = ({
           </IconButton>
         )}
       </Stack>
-      <Box sx={{ px: 2, pb: 2, pt: 2 }}>{children}</Box>
+      <Box sx={{ px: 2, pb: 2, pt: 2, overflowY: 'auto' }}>{children}</Box>
     </Box>
   );
 };
