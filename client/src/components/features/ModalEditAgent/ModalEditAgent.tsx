@@ -1,6 +1,7 @@
 import { useMemo, useState, type FC } from 'react';
-import { Modal, Stack, Typography } from '@mui/material';
+import { Modal, Stack } from '@mui/material';
 
+import { FormEditAgent } from '@components/features/FormEditAgent';
 import { ModalWindow } from '@components/ui/ModalWindow';
 
 import ModalEditAgentContext from './ModalEditAgentContext';
@@ -44,8 +45,7 @@ const ModalEditAgent: FC<ModalEditAgentProps> = ({
       >
         <Stack spacing={2}>
           <ModalWindow title={title} onCloseCallback={handleClose}>
-            <Typography>EDIT AGENT FORM</Typography>
-            <Typography>AGENT ID: {agentId}</Typography>
+            <FormEditAgent isLoading={false} />
           </ModalWindow>
         </Stack>
       </Modal>

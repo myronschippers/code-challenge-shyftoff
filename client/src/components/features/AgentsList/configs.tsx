@@ -1,7 +1,8 @@
 import { createColumnHelper } from '@tanstack/react-table';
-
-import type { Agent } from './types';
 import { Typography } from '@mui/material';
+
+import type { Agent } from '@/types';
+
 import CellActions from './CellActions';
 
 const columnHelper = createColumnHelper<Agent>();
