@@ -5,10 +5,16 @@ import AgentsList from '@/components/features/AgentsList/AgentsList';
 const Agents = () => {
   return (
     <>
-      <Typography variant="h1" component="h1">
-        Agents Page
+      <Typography
+        variant="h4"
+        component="h1"
+        fontWeight={700}
+        gutterBottom
+        textTransform="uppercase"
+      >
+        Agents
       </Typography>
-      <AgentsList title="Agents List" />
+      <AgentsList title="Current Agents" />
     </>
   );
 };

@@ -10,7 +10,7 @@ const Layout: FC<LayoutProps> = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <Grid container spacing={2} direction="column" height="100%">
+    <Grid container spacing={2} direction="column" wrap="nowrap" height="100%">
       <Grid component="header" size={12}>
         <Topper />
       </Grid>
