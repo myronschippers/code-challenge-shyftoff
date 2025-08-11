@@ -14,6 +14,15 @@ export const theme = createTheme({
       paper: '#2c2c2b',
     },
   },
+  components: {
+    MuiAppBar: {
+      styleOverrides: {
+        colorPrimary: {
+          backgroundColor: '#2c2c2b',
+        },
+      },
+    },
+  },
   typography: {
     fontFamily: '"Open Sans", "Helvetica", "Arial", sans-serif',
   },
