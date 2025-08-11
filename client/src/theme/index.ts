@@ -22,6 +22,15 @@ export const theme = createTheme({
         },
       },
     },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          // Remove background image from all Paper components
+          // gets rid of Paper overlay default that MUI applies
+          backgroundImage: 'none',
+        },
+      },
+    },
   },
   typography: {
     fontFamily: '"Open Sans", "Helvetica", "Arial", sans-serif',
