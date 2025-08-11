@@ -19,7 +19,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import PaperPanel from '@/components/ui/PaperPanel/PaperPanel';
+import { PaperPanel } from '@components/ui/PaperPanel';
 
 import { columnsConfig } from './configs';
 import TableRowMessage from './TableRowMessage';
