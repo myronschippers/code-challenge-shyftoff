@@ -14,4 +14,10 @@ export default defineConfig({
       '@components': path.resolve(__dirname, './src/components'),
     },
   },
+  server: {
+    proxy: {
+      // String shorthand for simple proxies
+      '/api': 'http://localhost:3000',
+    },
+  },
 });
