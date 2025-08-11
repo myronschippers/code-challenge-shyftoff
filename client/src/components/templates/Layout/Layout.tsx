@@ -1,11 +1,12 @@
 import { type FC } from 'react';
+import { Outlet } from 'react-router';
 import { Box, Grid, Typography } from '@mui/material';
 
 import { Topper } from '@components/templates/Topper';
 
 import type { LayoutProps } from './types';
 
-const Layout: FC<LayoutProps> = ({ children }) => {
+const Layout: FC<LayoutProps> = () => {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -15,7 +16,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       </Grid>
       <Grid component="main" size={12} flexGrow={1}>
         <Box px={{ xs: 2, md: 4 }} py={2}>
-          {children}
+          <Outlet />
         </Box>
       </Grid>
       <Grid component="footer" size={12}>
