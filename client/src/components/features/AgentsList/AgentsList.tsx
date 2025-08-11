@@ -20,6 +20,7 @@ import {
 } from '@mui/material';
 
 import { PaperPanel } from '@components/ui/PaperPanel';
+import { ModalEditAgent } from '@components/features/ModalEditAgent';
 
 import { columnsConfig } from './configs';
 import TableRowMessage from './TableRowMessage';
@@ -47,7 +48,7 @@ const AgentsList: FC<AgentsListProps> = ({ title }) => {
   }, [data]);
 
   return (
-    <>
+    <ModalEditAgent>
       <PaperPanel>
         <Typography component="h3" variant="h6">
           {title}
@@ -142,7 +143,7 @@ const AgentsList: FC<AgentsListProps> = ({ title }) => {
           </IconButton>
         </Stack>
       )}
-    </>
+    </ModalEditAgent>
   );
 };
 
