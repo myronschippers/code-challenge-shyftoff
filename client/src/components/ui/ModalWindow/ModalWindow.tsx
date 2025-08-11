@@ -2,8 +2,6 @@ import { type FC, type MouseEvent } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, IconButton, Stack, Typography } from '@mui/material';
 
-import { PaperPanel } from '@components/ui/PaperPanel';
-
 import type { ModalWindowProps } from './types';
 
 const ModalWindow: FC<ModalWindowProps> = ({
@@ -26,34 +24,36 @@ const ModalWindow: FC<ModalWindowProps> = ({
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        // bgcolor: 'background.paper',
-        // border: '2px solid #000',
-        // padding: 2,
-        // boxShadow: 24,
-        width: 400,
+        bgcolor: 'background.paper',
+        border: '1px solid #000',
+        boxShadow: 24,
+        borderRadius: 6,
+        width: 500,
+        overflow: 'hidden',
         zIndex: 1300,
       }}
     >
-      <PaperPanel>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          mb={2}
-        >
-          {title && (
-            <Typography variant="h6" component="h2" gutterBottom>
-              {title}
-            </Typography>
-          )}
-          {onCloseCallback && (
-            <IconButton aria-label="previous" onClick={handleClose}>
-              <CloseIcon aria-label="close" />
-            </IconButton>
-          )}
-        </Stack>
-        {children}
-      </PaperPanel>
+      <Stack
+        direction="row"
+        alignItems="center"
+        sx={{ bgcolor: '#5822B3', px: 2, pt: 2, pb: 1, width: '100%' }}
+      >
+        {title && (
+          <Typography variant="h6" component="h2" fontWeight={600}>
+            {title}
+          </Typography>
+        )}
+        {onCloseCallback && (
+          <IconButton
+            aria-label="previous"
+            onClick={handleClose}
+            sx={{ ml: 'auto' }}
+          >
+            <CloseIcon aria-label="close" />
+          </IconButton>
+        )}
+      </Stack>
+      <Box sx={{ px: 2, pb: 2, pt: 2 }}>{children}</Box>
     </Box>
   );
 };
