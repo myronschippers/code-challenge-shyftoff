@@ -1,21 +1,32 @@
 import { type FC } from 'react';
-import { Grid } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 
 import { Topper } from '@components/templates/Topper';
 
 import type { LayoutProps } from './types';
 
 const Layout: FC<LayoutProps> = ({ children }) => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <Grid container spacing={2} direction="column" height="100%">
       <Grid component="header" size={12}>
         <Topper />
       </Grid>
       <Grid component="main" size={12} flexGrow={1}>
-        {children}
+        <Box px={{ xs: 2, md: 4 }} py={2}>
+          {children}
+        </Box>
       </Grid>
       <Grid component="footer" size={12}>
-        <p>&copy; 2023 My Application</p>
+        <Typography
+          textAlign="center"
+          variant="caption"
+          py="1rem"
+          component="p"
+        >
+          &copy; {currentYear} Code Challenge
+        </Typography>
       </Grid>
     </Grid>
   );
