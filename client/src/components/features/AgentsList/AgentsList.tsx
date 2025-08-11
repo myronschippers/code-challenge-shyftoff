@@ -1,4 +1,4 @@
-import { useEffect, useState, useDeferredValue, type FC } from 'react';
+import { useState, useDeferredValue, type FC } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import {
   flexRender,
@@ -42,10 +42,6 @@ const AgentsList: FC<AgentsListProps> = ({ title }) => {
     columns: columnsConfig,
     getCoreRowModel: getCoreRowModel(),
   });
-
-  useEffect(() => {
-    console.log('AgentsList - data:', data);
-  }, [data]);
 
   return (
     <ModalEditAgent>

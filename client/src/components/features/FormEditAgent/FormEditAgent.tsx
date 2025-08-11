@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { useEffect, type FC } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { Button, Stack, TextField } from '@mui/material';
 
@@ -9,16 +9,23 @@ const FormEditAgent: FC<FormEditAgentProps> = ({ agent, isLoading }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm<FormSchemaType>({
-    defaultValues: agent
-      ? {
-          firstName: agent.first_name,
-          lastName: agent.last_name,
-          email: agent.email,
-        }
-      : undefined,
-  });
+  } = useForm<FormSchemaType>();
+
+  useEffect(() => {
+    return () => reset();
+  }, []);
+
+  useEffect(() => {
+    if (agent) {
+      reset({
+        firstName: agent.first_name,
+        lastName: agent.last_name,
+        email: agent.email,
+      });
+    }
+  }, [agent, reset]);
 
   const onSubmitAgent: SubmitHandler<FormSchemaType> = (data) =>
     console.log(data);

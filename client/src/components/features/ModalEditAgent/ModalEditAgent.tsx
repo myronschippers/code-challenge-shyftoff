@@ -1,8 +1,10 @@
 import { useMemo, useState, type FC } from 'react';
-import { Modal, Stack } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import { Modal, Stack, Typography } from '@mui/material';
 
 import { FormEditAgent } from '@components/features/FormEditAgent';
 import { ModalWindow } from '@components/ui/ModalWindow';
+import type { Agent } from '@/types';
 
 import ModalEditAgentContext from './ModalEditAgentContext';
 import type { ModalEditAgentProps } from './types';
@@ -13,6 +15,14 @@ const ModalEditAgent: FC<ModalEditAgentProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [agentId, setAgentId] = useState<number | null>(null);
+
+  const { error, data, isFetching } = useQuery<Agent>({
+    queryKey: ['agentDetails', agentId],
+    queryFn: async () => {
+      const response = await fetch(`/api/agents/${agentId}`);
+      return await response.json();
+    },
+  });
 
   const handleOpen = (id: number) => {
     setAgentId(id);
@@ -45,7 +55,18 @@ const ModalEditAgent: FC<ModalEditAgentProps> = ({
       >
         <Stack spacing={2}>
           <ModalWindow title={title} onCloseCallback={handleClose}>
-            <FormEditAgent isLoading={false} />
+            {!error && data && (
+              <FormEditAgent
+                key={agentId}
+                agent={data}
+                isLoading={isFetching}
+              />
+            )}
+            {error && (
+              <Typography color="error">
+                There was an error: {error.message}
+              </Typography>
+            )}
           </ModalWindow>
         </Stack>
       </Modal>
