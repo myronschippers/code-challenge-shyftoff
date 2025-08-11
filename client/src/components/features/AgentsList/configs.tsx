@@ -2,6 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 import type { Agent } from './types';
 import { Typography } from '@mui/material';
+import CellActions from './CellActions';
 
 const columnHelper = createColumnHelper<Agent>();
 
@@ -31,6 +32,6 @@ export const columnsConfig = [
   columnHelper.display({
     id: 'actions',
     header: 'Actions',
-    cell: () => <Typography>Actions</Typography>,
+    cell: ({ row }) => <CellActions agentId={row.original.id} />,
   }),
 ];

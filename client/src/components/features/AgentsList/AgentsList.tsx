@@ -33,7 +33,6 @@ const AgentsList: FC<AgentsListProps> = ({ title }) => {
       queryKey: ['agentsList', deferredPage],
       queryFn: async () => {
         const response = await fetch(`/api/agents/?page=${deferredPage}`);
-        console.log('AgentsList - response:', response);
         return await response.json();
       },
     });

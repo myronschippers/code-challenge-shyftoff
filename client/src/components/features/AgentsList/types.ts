@@ -7,6 +7,11 @@ export type TableRowMessageProps = {
   colSpan: number;
 };
 
+export type CellActionsProps = {
+  label?: string;
+  agentId: number;
+};
+
 export type Agent = {
   id: number;
   first_name: string;
