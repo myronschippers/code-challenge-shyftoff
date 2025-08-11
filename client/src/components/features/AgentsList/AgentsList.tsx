@@ -1,7 +1,23 @@
 import { useEffect, type FC } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Box, Typography } from '@mui/material';
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import {
+  Box,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material';
 
+import { columnsConfig } from './configs';
 import type { AgentsListProps } from './types';
 
 const AgentsList: FC<AgentsListProps> = ({ title }) => {
@@ -12,6 +28,11 @@ const AgentsList: FC<AgentsListProps> = ({ title }) => {
       console.log('AgentsList - response:', response);
       return await response.json();
     },
+  });
+  const agentsTable = useReactTable({
+    data: data?.agents || [],
+    columns: columnsConfig,
+    getCoreRowModel: getCoreRowModel(),
   });
 
   useEffect(() => {
@@ -28,7 +49,42 @@ const AgentsList: FC<AgentsListProps> = ({ title }) => {
       {error && (
         <Typography>{`An error has occurred: ${error.message}`}</Typography>
       )}
-      {data && <Typography>Agents Found</Typography>}
+      {data && (
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              {agentsTable.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <TableCell component="th" key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableHead>
+            <TableBody>
+              {agentsTable.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell component="td" key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
     </Box>
   );
 };
