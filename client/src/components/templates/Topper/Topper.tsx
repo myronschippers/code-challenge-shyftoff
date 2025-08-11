@@ -1,4 +1,5 @@
-import * as React from 'react';
+import { useState, type MouseEvent } from 'react';
+import { useNavigate } from 'react-router';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
   AppBar,
@@ -16,26 +17,32 @@ import {
 
 import Logo from './Logo';
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = [
+  { path: '/agents', text: 'Agents' },
+  { path: 'campaigns', text: 'Campaigns' },
+];
+const settings = ['Profile', 'Account', 'Logout'];
 
 function Topper() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  const handleNavTo = (path: string) => {
+    handleCloseNavMenu();
+    // Navigate to the specified path
+    navigate(path);
   };
 
   const handleCloseUserMenu = () => {
@@ -76,8 +83,13 @@ function Topper() {
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                <MenuItem
+                  key={page.text}
+                  onClick={() => handleNavTo(page.path)}
+                >
+                  <Typography sx={{ textAlign: 'center' }}>
+                    {page.text}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -88,11 +100,11 @@ function Topper() {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={page.text}
+                onClick={() => handleNavTo(page.path)}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                {page.text}
               </Button>
             ))}
           </Box>
