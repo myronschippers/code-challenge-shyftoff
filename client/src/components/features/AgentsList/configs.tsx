@@ -1,10 +1,10 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import SupportAgentIcon from '@mui/icons-material/SupportAgent';
-import { Chip, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 import type { Agent } from '@/types';
 
 import CellActions from './CellActions';
+import CellStatus from './CellStatus';
 
 const columnHelper = createColumnHelper<Agent>();
 
@@ -16,11 +16,9 @@ export const columnsConfig = [
     header: 'Status',
     cell: ({ row }) => {
       return (
-        <Chip
-          icon={<SupportAgentIcon />}
-          label={row.original.is_active ? 'Active' : 'Inactive'}
-          color={row.original.is_active ? 'primary' : 'error'}
-          variant="outlined"
+        <CellStatus
+          isActive={row.original.is_active}
+          agentId={row.original.id}
         />
       );
     },

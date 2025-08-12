@@ -14,6 +14,11 @@ export type CellActionsProps = {
   agentId: number;
 };
 
+export type CellStatusProps = {
+  isActive: boolean;
+  agentId: number;
+};
+
 export type AgentsResponse = {
   agents: Agent[];
   pager: {
