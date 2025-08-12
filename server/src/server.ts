@@ -2,6 +2,7 @@ import express, { type Request, type Response } from 'express';
 import bodyParser from 'body-parser';
 
 import { agentRouter } from './routes/agentRouter';
+import { campaignsRouter } from './routes/campaignsRouter';
 
 const app = express();
 
@@ -18,5 +19,6 @@ app.get('/', (_req: Request, res: Response) => {
 // ----------
 const BASE_API_URL = '/api';
 app.use(`${BASE_API_URL}/agents`, agentRouter);
+app.use(`${BASE_API_URL}/campaigns`, campaignsRouter);
 
 export default app;
