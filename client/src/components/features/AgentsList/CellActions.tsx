@@ -2,7 +2,7 @@ import { type FC } from 'react';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditSquareIcon from '@mui/icons-material/EditSquare';
-import { IconButton, Stack, Typography } from '@mui/material';
+import { IconButton, Stack, Tooltip, Typography } from '@mui/material';
 
 import { useModalEditAgentContext } from '@components/features/ModalEditAgent';
 
@@ -38,23 +38,27 @@ const CellActions: FC<CellActionsProps> = ({ label, agentId }) => {
     <Stack direction="row" spacing={1} alignItems="center">
       {label && <Typography>{label}:</Typography>}
 
-      <IconButton
-        aria-label="delete"
-        size="small"
-        color="info"
-        onClick={handleEdit}
-      >
-        <EditSquareIcon fontSize="small" />
-      </IconButton>
+      <Tooltip title="Edit Agent">
+        <IconButton
+          aria-label="edit"
+          size="small"
+          color="info"
+          onClick={handleEdit}
+        >
+          <EditSquareIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
 
-      <IconButton
-        aria-label="delete"
-        size="small"
-        color="error"
-        onClick={handleDelete}
-      >
-        <DeleteIcon fontSize="small" />
-      </IconButton>
+      <Tooltip title="Delete">
+        <IconButton
+          aria-label="delete"
+          size="small"
+          color="error"
+          onClick={handleDelete}
+        >
+          <DeleteIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
     </Stack>
   );
 };
