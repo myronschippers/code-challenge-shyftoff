@@ -5,9 +5,11 @@ export const theme = createTheme({
     mode: 'dark',
     primary: {
       main: '#BAFF66',
+      // main: '#732bef',
     },
     secondary: {
-      main: '#FF9B23',
+      // main: '#FF9B23',
+      main: '#FF66C4',
     },
     background: {
       default: '#1b1b1b',

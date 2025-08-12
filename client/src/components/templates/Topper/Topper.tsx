@@ -50,7 +50,11 @@ function Topper() {
   };
 
   return (
-    <AppBar component="div" position="static">
+    <AppBar
+      component="div"
+      position="static"
+      sx={{ borderBottom: '1px solid #000000' }}
+    >
       <Box sx={{ pr: { xs: 2, md: 4 }, pl: { xs: 2, md: 0 } }}>
         <Toolbar disableGutters sx={{ minHeight: 'auto' }}>
           <Logo sx={{ display: { xs: 'none', md: 'flex' } }} />
