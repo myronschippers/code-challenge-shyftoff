@@ -29,4 +29,101 @@ router.get(
   }
 );
 
+/**
+ * GET All Campaigns from the `campaign` table with their KPI
+ * grouped by day, week, and month
+ */
+router.get(
+  '/:campaignId/kpi/:yearMonthDay',
+  (req: Request, res: Response, _next: express.NextFunction): void => {
+    const { campaignId, yearMonthDay } = req.params;
+    try {
+      function makeQueryForYearMonthDay(yearMonthDayCrit: string) {
+        switch (yearMonthDayCrit) {
+          case 'year':
+            const queryKpiYear = `
+              SELECT
+                camp.id,
+                camp.name,
+                camp.description,
+                STRFTIME('%Y', kpi.date) AS kpi_year,
+                SUM(kpi.hours) AS total_hours
+              FROM campaign AS camp
+              JOIN campaign_kpi AS kpi
+                ON camp.id = kpi.campaign_id
+              WHERE camp.id = ?
+              GROUP BY kpi_year
+              ORDER BY kpi_year;`;
+
+            return queryKpiYear;
+          case 'month':
+            const queryKpiYearMonth = `
+              SELECT
+                camp.id,
+                camp.name,
+                camp.description,
+                STRFTIME('%Y', kpi.date) AS kpi_year,
+                STRFTIME('%m', kpi.date) AS kpi_month,
+                SUM(kpi.hours) AS total_hours
+              FROM campaign AS camp
+              JOIN campaign_kpi AS kpi
+                ON camp.id = kpi.campaign_id
+              WHERE camp.id = ?
+              GROUP BY
+                kpi_year,
+                kpi_month
+              ORDER BY
+                kpi_year,
+                kpi_month;`;
+
+            return queryKpiYearMonth;
+          default:
+            const queryKpiYearMonthDay = `
+              SELECT
+                camp.id,
+                camp.name,
+                camp.description,
+                STRFTIME('%Y', kpi.date) AS kpi_year,
+                STRFTIME('%m', kpi.date) AS kpi_month,
+                STRFTIME('%d', kpi.date) AS kpi_day,
+                SUM(kpi.hours) AS total_hours
+              FROM campaign AS camp
+              JOIN campaign_kpi AS kpi
+                ON camp.id = kpi.campaign_id
+              WHERE camp.id = ?
+              GROUP BY
+                kpi_year,
+                kpi_month,
+                kpi_day
+              ORDER BY
+                kpi_year,
+                kpi_month,
+                kpi_day;`;
+
+            return queryKpiYearMonthDay;
+        }
+      }
+
+      DB.all(
+        makeQueryForYearMonthDay(yearMonthDay),
+        [campaignId],
+        (err, rows) => {
+          if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+          }
+
+          res.status(200).json({
+            campaigns: rows,
+          });
+        }
+      );
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: { message: 'Internal Server Error', info: error } });
+    }
+  }
+);
+
 export { router as campaignsRouter };
