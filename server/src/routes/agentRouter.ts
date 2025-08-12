@@ -33,12 +33,10 @@ router.get(
                 res.status(500).json({ error: err.message });
                 return;
               }
-              res
-                .status(200)
-                .json({
-                  agents: rows,
-                  pager: { limit, offset, page, totalItems, totalPages },
-                });
+              res.status(200).json({
+                agents: rows,
+                pager: { limit, offset, page, totalItems, totalPages },
+              });
             }
           );
         }
@@ -142,6 +140,36 @@ router.put(
           res.status(200).json({ agent: rows });
         }
       );
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: { message: 'Internal Server Error', info: error } });
+    }
+  }
+);
+
+/**
+ * PUT route to UPDATE a specific agent in the `agent` table
+ */
+router.put(
+  '/:agentId/active/toggle',
+  (req: Request, res: Response, _next: express.NextFunction): void => {
+    try {
+      const query = `UPDATE agent
+        SET is_active = CASE is_active
+                          WHEN 0 THEN 1
+                          WHEN 1 THEN 0
+                        END
+        WHERE id = ?;`;
+      const { agentId } = req.params;
+
+      DB.run(query, [agentId], (err: Error, rows: { id: number }[]) => {
+        if (err) {
+          res.status(500).json({ error: err.message });
+          return;
+        }
+        res.status(200).json({ agent: rows });
+      });
     } catch (error) {
       res
         .status(500)
