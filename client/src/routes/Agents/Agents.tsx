@@ -1,19 +1,10 @@
-import { Typography } from '@mui/material';
-
-import AgentsList from '@/components/features/AgentsList/AgentsList';
+import { AgentsList } from '@/components/features/AgentsList';
+import { PgHeading } from '@/components/ui/PgHeading';
 
 const Agents = () => {
   return (
     <>
-      <Typography
-        variant="h4"
-        component="h1"
-        fontWeight={700}
-        gutterBottom
-        textTransform="uppercase"
-      >
-        Agents
-      </Typography>
+      <PgHeading text="Agents" />
       <AgentsList title="Current Agents" />
     </>
   );

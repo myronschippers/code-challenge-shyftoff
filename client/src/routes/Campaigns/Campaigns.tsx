@@ -1,10 +1,21 @@
-import { Typography } from '@mui/material';
+import { Grid } from '@mui/material';
+
+import { PaperPanel } from '@/components/ui/PaperPanel';
+import { PgHeading } from '@/components/ui/PgHeading';
 
 const Campaigns = () => {
   return (
-    <Typography variant="h1" component="h1">
-      Campaigns Page
-    </Typography>
+    <>
+      <PgHeading text="Campaigns" />
+      <Grid container spacing={3}>
+        <Grid size={7}>
+          <PaperPanel>Main Campaign Content</PaperPanel>
+        </Grid>
+        <Grid size={5}>
+          <PaperPanel>Secondary Campaign Content</PaperPanel>
+        </Grid>
+      </Grid>
+    </>
   );
 };
 
