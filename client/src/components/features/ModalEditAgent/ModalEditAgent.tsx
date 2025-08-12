@@ -60,6 +60,7 @@ const ModalEditAgent: FC<ModalEditAgentProps> = ({
                 key={agentId}
                 agent={data}
                 isLoading={isFetching}
+                onSuccessCallback={() => handleClose()}
               />
             )}
             {error && (

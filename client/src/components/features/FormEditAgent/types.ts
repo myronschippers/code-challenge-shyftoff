@@ -4,6 +4,7 @@ import type { PropsWithChildren } from 'react';
 export type FormEditAgentProps = {
   agent?: Agent;
   isLoading?: boolean;
+  onSuccessCallback?: () => void;
 };
 
 export type FieldErrorMsgWrapProps = PropsWithChildren & {

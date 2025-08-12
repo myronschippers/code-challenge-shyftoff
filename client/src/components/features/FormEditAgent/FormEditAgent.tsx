@@ -1,17 +1,50 @@
 import { useEffect, type FC } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { Button, Stack, TextField } from '@mui/material';
 
 import FieldErrorMsgWrap from './FieldErrorMsgWrap';
 import type { FormEditAgentProps, FormSchemaType } from './types';
 
-const FormEditAgent: FC<FormEditAgentProps> = ({ agent, isLoading }) => {
+const FormEditAgent: FC<FormEditAgentProps> = ({
+  agent,
+  isLoading = false,
+  onSuccessCallback,
+}) => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<FormSchemaType>();
+
+  const queryClient = useQueryClient();
+  const { mutateAsync: updateOrAddAgent } = useMutation({
+    mutationFn: async (agentFormData: FormSchemaType) => {
+      if (agent) {
+        await fetch(`/api/agents/${agent.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...agent,
+            ...agentFormData,
+          }),
+        });
+      }
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['agentsList'],
+        refetchType: 'all',
+      });
+
+      if (onSuccessCallback) {
+        onSuccessCallback();
+      }
+    },
+  });
 
   useEffect(() => {
     return () => reset();
@@ -27,8 +60,9 @@ const FormEditAgent: FC<FormEditAgentProps> = ({ agent, isLoading }) => {
     }
   }, [agent, reset]);
 
-  const onSubmitAgent: SubmitHandler<FormSchemaType> = (data) =>
-    console.log(data);
+  const onSubmitAgent: SubmitHandler<FormSchemaType> = (data) => {
+    updateOrAddAgent(data);
+  };
 
   return (
     <Stack component="form" onSubmit={handleSubmit(onSubmitAgent)} spacing={3}>
