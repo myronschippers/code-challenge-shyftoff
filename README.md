@@ -44,11 +44,59 @@ Update Node to the project version with the command below.
 nvm use
 ```
 
-**TODO: Add client and server installation documentation**
+In terminal navigate to the `/server` directory.
+
+```bash
+cd server
+```
+
+Install dependencies.
+
+```bash
+yarn install
+```
+
+Open a new terminal at the root of the project.
+
+> NOTE: Leave the `/server` terminal open.
+
+In terminal navigate to the `/client` directory
+
+```bash
+cd client
+```
+
+Ensure you have the right version of node.
+
+```bash
+nvm use
+```
+
+Install dependencies.
+
+```bash
+yarn install
+```
 
 ## Usage
 
-**TODO: Add client and server usage documentation**
+In the terminal that you have the `/server` in run...
+
+```bash
+yarn dev
+```
+
+> NOTE: Server should be running on [http://localhost:3000/](http://localhost:3000/).
+
+**THEN**
+
+In the terminal that you have the `/client` in run...
+
+```bash
+yarn dev
+```
+
+> NOTE: Client should be running on [http://localhost:5173/](http://localhost:5173/).
 
 ## License
 
