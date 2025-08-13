@@ -34,3 +34,8 @@ export type AgentsResponse = {
     totalPages: number;
   };
 };
+
+export type AssignedCampaignPayload = {
+  agentId: number;
+  campaignId: number;
+};

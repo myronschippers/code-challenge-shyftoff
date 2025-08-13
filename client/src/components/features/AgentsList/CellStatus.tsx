@@ -10,10 +10,9 @@ const CellStatus: FC<CellStatusProps> = ({ isActive, agentId }) => {
 
   const { mutateAsync: toggleAgentActiveStatus } = useMutation({
     mutationFn: async (agentId: number) => {
-      const response = await fetch(`/api/agents/${agentId}/active/toggle`, {
+      await fetch(`/api/agents/${agentId}/active/toggle`, {
         method: 'PUT',
       });
-      return await response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['agentsList'] });

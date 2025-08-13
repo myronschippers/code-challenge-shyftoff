@@ -1,4 +1,4 @@
-import { useState, useDeferredValue, type FC } from 'react';
+import { useState, type FC } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import {
   flexRender,
@@ -28,14 +28,14 @@ import type { AgentsListProps, AgentsResponse } from './types';
 
 const AgentsList: FC<AgentsListProps> = ({ title }) => {
   const [currPage, setCurrentPage] = useState(1);
-  const deferredPage = useDeferredValue(currPage);
   const { isPending, error, data, isFetching } =
     useSuspenseQuery<AgentsResponse>({
-      queryKey: ['agentsList', deferredPage],
+      queryKey: ['agentsList', currPage],
       queryFn: async () => {
-        const response = await fetch(`/api/agents/?page=${deferredPage}`);
+        const response = await fetch(`/api/agents/?page=${currPage}`);
         return await response.json();
       },
+      refetchOnMount: true,
     });
   console.log('!!! Agent Data:', data);
   const agentsTable = useReactTable({

@@ -1,5 +1,9 @@
 import { useState, type FC, type MouseEvent } from 'react';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import {
+  useSuspenseQuery,
+  useQueryClient,
+  useMutation,
+} from '@tanstack/react-query';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
@@ -13,13 +17,14 @@ import {
 
 import type { AgentCampaign, CampaignsResp, Campaign } from '@/types';
 
-import type { CellCampaignsProps } from './types';
+import type { CellCampaignsProps, AssignedCampaignPayload } from './types';
 
 const CellCampaigns: FC<CellCampaignsProps> = ({ campaigns, agentId }) => {
   const [addCampaignElement, setAddCampaignElement] = useState<Element | null>(
     null
   );
   const open = Boolean(addCampaignElement);
+  const queryClient = useQueryClient();
   const { data: campaignsData, isFetching } = useSuspenseQuery<CampaignsResp>({
     queryKey: ['campaignsList'],
     queryFn: async () => {
@@ -27,21 +32,51 @@ const CellCampaigns: FC<CellCampaignsProps> = ({ campaigns, agentId }) => {
       return await response.json();
     },
   });
+  const { mutateAsync: removeAssignedCampaign } = useMutation({
+    mutationFn: async ({ agentId, campaignId }: AssignedCampaignPayload) => {
+      await fetch(`/api/agents/${agentId}/campaign/${campaignId}`, {
+        method: 'DELETE',
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['agentsList'],
+      });
+    },
+  });
+  const { mutateAsync: assignedCampaign } = useMutation({
+    mutationFn: async ({ agentId, campaignId }: AssignedCampaignPayload) => {
+      await fetch(`/api/agents/${agentId}/campaign/${campaignId}`, {
+        method: 'POST',
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['agentsList'],
+      });
+    },
+  });
 
-  const handleDelete = (campaign: AgentCampaign) => () => {
-    console.log(`Delete campaign "${campaign.name}" for Agent ID "${agentId}"`);
+  const handleDelete = (campaign: AgentCampaign) => async () => {
+    removeAssignedCampaign({
+      campaignId: campaign.campaign_id,
+      agentId,
+    });
   };
 
   const handleOpenAdd = (e: MouseEvent<HTMLButtonElement>) => {
     setAddCampaignElement(e.currentTarget);
   };
 
-  const handleCloseAdd = () => {
+  const handleCloseAdd = async () => {
     setAddCampaignElement(null);
   };
 
   const handleAddCampaign = (campaign: Campaign) => () => {
-    console.log(`ADD campaign "${campaign.name}" to Agent ID "${agentId}"`);
+    assignedCampaign({
+      agentId,
+      campaignId: campaign.id,
+    });
     setAddCampaignElement(null);
   };
 
