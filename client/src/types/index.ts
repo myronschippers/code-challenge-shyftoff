@@ -16,6 +16,6 @@ export type CampaignKpiDayOfWeek = {
   day_of_week: string;
 };
 
-export type DayOfWeekResp = {
+export type KpiDayOfWeekResp = {
   campaign_kpi_days: CampaignKpiDayOfWeek[];
 };
