@@ -4,6 +4,7 @@ import { Typography } from '@mui/material';
 import type { Agent } from '@/types';
 
 import CellActions from './CellActions';
+import CellCampaigns from './CellCampaigns';
 import CellStatus from './CellStatus';
 
 const columnHelper = createColumnHelper<Agent>();
@@ -31,6 +32,17 @@ export const columnsConfig = [
   }),
   columnHelper.accessor('email', {
     header: 'Email',
+  }),
+  columnHelper.accessor('campaigns', {
+    header: 'Status',
+    cell: ({ row }) => {
+      return (
+        <CellCampaigns
+          campaigns={row.original.campaigns}
+          agentId={row.original.id}
+        />
+      );
+    },
   }),
   columnHelper.accessor('created_at', {
     header: 'Created At',

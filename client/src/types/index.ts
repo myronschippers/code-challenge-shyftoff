@@ -5,6 +5,7 @@ export type Agent = {
   email: string;
   created_at: string;
   is_active: boolean;
+  campaigns: AgentCampaign[];
 };
 
 export type CampaignKpiDayOfWeek = {
@@ -32,4 +33,21 @@ export type CampaignKpiYearMonthDay = {
 
 export type KpiYearMonthDayResp = {
   campaign_kpi: CampaignKpiYearMonthDay[];
+};
+
+export type AgentCampaign = {
+  campaign_id: number;
+  name: string;
+};
+
+export type Campaign = {
+  id: number;
+  name: string;
+  description: string;
+  is_active: number;
+  created_at: string;
+};
+
+export type CampaignsResp = {
+  campaigns: Campaign[];
 };

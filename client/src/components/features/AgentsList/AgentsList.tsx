@@ -37,6 +37,7 @@ const AgentsList: FC<AgentsListProps> = ({ title }) => {
         return await response.json();
       },
     });
+  console.log('!!! Agent Data:', data);
   const agentsTable = useReactTable({
     data: data?.agents || [],
     columns: columnsConfig,

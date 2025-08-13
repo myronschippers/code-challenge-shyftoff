@@ -1,4 +1,4 @@
-import type { Agent } from '@/types';
+import type { Agent, AgentCampaign } from '@/types';
 
 export type AgentsListProps = {
   title: string;
@@ -17,6 +17,11 @@ export type CellActionsProps = {
 export type CellStatusProps = {
   isActive: boolean;
   agentId: number;
+};
+
+export type CellCampaignsProps = {
+  agentId: number;
+  campaigns: AgentCampaign[];
 };
 
 export type AgentsResponse = {
