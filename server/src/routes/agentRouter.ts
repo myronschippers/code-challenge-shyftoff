@@ -43,11 +43,20 @@ router.get(
               Ag.email,
               Ag.is_active,
               Ag.created_at,
-              json_group_array(json_object('campaign_id', CpAg.campaign_id, 'name', Cp.name)) AS campaigns
+              CASE WHEN COUNT(Cp.id) > 0 THEN
+                json_group_array(
+                  json_object(
+                    'campaign_id', CpAg.campaign_id,
+                    'name', Cp.name
+                  )
+                )
+              ELSE
+                '[]'
+              END AS campaigns
             FROM agent AS Ag
-            JOIN campaign_agent AS CpAg
+            LEFT JOIN campaign_agent AS CpAg
               ON Ag.id = CpAg.agent_id
-            JOIN campaign AS Cp
+            LEFT JOIN campaign AS Cp
               ON Cp.id = CpAg.campaign_id
             GROUP BY Ag.id
             LIMIT ?
@@ -87,8 +96,32 @@ router.get(
  */
 router.get('/:agentId', (req: Request, res: Response): void => {
   try {
-    const query = 'SELECT * FROM agent WHERE id = ?';
-    DB.all(query, [req.params.agentId], (err, rows) => {
+    const query = `
+      SELECT
+        Ag.id,
+        Ag.first_name,
+        Ag.last_name,
+        Ag.email,
+        Ag.is_active,
+        Ag.created_at,
+        CASE WHEN COUNT(Cp.id) > 0 THEN
+          json_group_array(
+            json_object(
+              'campaign_id', CpAg.campaign_id,
+              'name', Cp.name
+            )
+          )
+        ELSE
+          '[]'
+        END AS campaigns
+      FROM agent AS Ag
+      LEFT JOIN campaign_agent AS CpAg
+        ON Ag.id = CpAg.agent_id
+      LEFT JOIN campaign AS Cp
+        ON Cp.id = CpAg.campaign_id
+      WHERE Ag.id = ?
+      GROUP BY Ag.id;`;
+    DB.all<AgentDbQuery>(query, [req.params.agentId], (err, rows) => {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
@@ -98,7 +131,14 @@ router.get('/:agentId', (req: Request, res: Response): void => {
         res.status(404).json({ error: 'Agent not found' });
         return;
       }
-      res.status(200).json(rows[0]);
+      res.status(200).json(
+        rows.map((item) => {
+          return {
+            ...item,
+            campaigns: JSON.parse(item.campaigns),
+          };
+        })[0]
+      );
     });
   } catch (error) {
     res
@@ -127,7 +167,7 @@ router.post(
             res.status(500).json({ error: err.message });
             return;
           }
-          res.status(200).json({ agent: rows });
+          res.status(201).json({ agent: rows });
         }
       );
     } catch (error) {
@@ -232,5 +272,70 @@ router.delete('/:agentId', (req: Request, res: Response): void => {
       .json({ error: { message: 'Internal Server Error', info: error } });
   }
 });
+
+/**
+ * POST route to assign a campaign to an agent
+ */
+router.post(
+  '/:agentId/campaign/:campaignId',
+  (req: Request, res: Response): void => {
+    try {
+      const query = `
+        INSERT INTO campaign_agent(agent_id, campaign_id)
+        VALUES(?, ?)
+        RETURNING id;`;
+      const { agentId, campaignId } = req.params;
+
+      DB.run(
+        query,
+        [agentId, campaignId],
+        (err: Error, rows: { id: number }[]) => {
+          if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+          }
+          res.status(201).json(rows);
+        }
+      );
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: { message: 'Internal Server Error', info: error } });
+    }
+  }
+);
+
+/**
+ * DELETE route to remove assigned campaign from an agent
+ */
+router.delete(
+  '/:agentId/campaign/:campaignId',
+  (req: Request, res: Response): void => {
+    try {
+      const query = `
+        DELETE FROM campaign_agent
+        WHERE agent_id = ?
+        AND campaign_id = ?
+        RETURNING id;`;
+      const { agentId, campaignId } = req.params;
+
+      DB.run(
+        query,
+        [agentId, campaignId],
+        (err: Error, rows: { id: number }[]) => {
+          if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+          }
+          res.status(200).json(rows);
+        }
+      );
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: { message: 'Internal Server Error', info: error } });
+    }
+  }
+);
 
 export { router as agentRouter };
