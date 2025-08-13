@@ -4,6 +4,16 @@ import DB from '../db_connect';
 
 const router: express.Router = express.Router();
 
+type AgentDbQuery = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  is_active: number;
+  created_at: string;
+  campaigns: string;
+};
+
 /**
  * GET All Agents from the `agent` table
  */
@@ -25,8 +35,26 @@ router.get(
           const totalItems = countRows.totalItems;
           const totalPages = Math.ceil(totalItems / limit);
 
-          DB.all(
-            'SELECT * FROM agent LIMIT ? OFFSET ?;',
+          const queryAgentsWithCampaigns = `
+            SELECT
+              Ag.id,
+              Ag.first_name,
+              Ag.last_name,
+              Ag.email,
+              Ag.is_active,
+              Ag.created_at,
+              json_group_array(json_object('campaign_id', CpAg.campaign_id, 'name', Cp.name)) AS campaigns
+            FROM agent AS Ag
+            JOIN campaign_agent AS CpAg
+              ON Ag.id = CpAg.agent_id
+            JOIN campaign AS Cp
+              ON Cp.id = CpAg.campaign_id
+            GROUP BY Ag.id
+            LIMIT ?
+            OFFSET ?;
+          `;
+          DB.all<AgentDbQuery>(
+            queryAgentsWithCampaigns,
             [limit, offset],
             (err, rows) => {
               if (err) {
@@ -34,7 +62,12 @@ router.get(
                 return;
               }
               res.status(200).json({
-                agents: rows,
+                agents: rows.map((item) => {
+                  return {
+                    ...item,
+                    campaigns: JSON.parse(item.campaigns),
+                  };
+                }),
                 pager: { limit, offset, page, totalItems, totalPages },
               });
             }
