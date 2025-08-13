@@ -1,10 +1,15 @@
 import { Typography } from '@mui/material';
 
+import { PgHeading } from '@/components/ui/PgHeading';
+
 const Home = () => {
   return (
-    <Typography variant="h1" component="h1">
-      Home Page
-    </Typography>
+    <>
+      <PgHeading text="Home Page" />
+      <Typography>
+        Checkout the Agents and Campaigns pages linked in the top navigation.
+      </Typography>
+    </>
   );
 };
 

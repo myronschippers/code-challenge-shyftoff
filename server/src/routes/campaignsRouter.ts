@@ -1,5 +1,6 @@
 import express, { type Request, type Response } from 'express';
 
+import { roundToTwoDecimalPlaces } from '../utils';
 import DB from '../db_connect';
 
 const router: express.Router = express.Router();
@@ -9,7 +10,7 @@ type CampaignKpiAsDayOfWeek = {
   name: string;
   description: string;
   day_of_week_number: number;
-  total_hours_for_campaign: number;
+  total_hours: number;
 };
 
 /**
@@ -77,8 +78,12 @@ router.get(
 
         res.status(200).json({
           campaign_kpi_days: rows.map((kpiItem) => {
+            const weeksInTheYear = 52;
             return {
               ...kpiItem,
+              total_hours: roundToTwoDecimalPlaces(
+                kpiItem.total_hours / weeksInTheYear
+              ), // getting the average for hours in the week
               day_of_week: daysOfTheWeek[kpiItem.day_of_week_number],
             };
           }),
