@@ -19,3 +19,17 @@ export type CampaignKpiDayOfWeek = {
 export type KpiDayOfWeekResp = {
   campaign_kpi_days: CampaignKpiDayOfWeek[];
 };
+
+export type CampaignKpiYearMonthDay = {
+  id: number;
+  name: string;
+  description: string;
+  kpi_year: string;
+  kpi_month: string;
+  kpi_day: string;
+  total_hours: number;
+};
+
+export type KpiYearMonthDayResp = {
+  campaign_kpi: CampaignKpiYearMonthDay[];
+};

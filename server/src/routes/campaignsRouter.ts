@@ -180,7 +180,7 @@ router.get(
           }
 
           res.status(200).json({
-            campaigns: rows,
+            campaign_kpi: rows,
           });
         }
       );

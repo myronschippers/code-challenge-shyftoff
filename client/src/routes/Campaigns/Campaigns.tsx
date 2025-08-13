@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Grid } from '@mui/material';
 
 import { ChartKpiDayOfWeek } from '@/components/features/ChartKpiDayOfWeek';
-import { PaperPanel } from '@/components/ui/PaperPanel';
+import { ChartKpiYearMonthDay } from '@/components/features/ChartKpiYearMonthDay';
 import { PgHeading } from '@/components/ui/PgHeading';
 
 const Campaigns = () => {
@@ -12,10 +12,10 @@ const Campaigns = () => {
     <>
       <PgHeading text="Campaigns" />
       <Grid container spacing={3}>
-        <Grid size={7}>
-          <PaperPanel>Main Campaign Content</PaperPanel>
+        <Grid size={{ xs: 12, md: 8 }}>
+          <ChartKpiYearMonthDay campaignId={campaignId} />
         </Grid>
-        <Grid size={5}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <ChartKpiDayOfWeek campaignId={campaignId} />
         </Grid>
       </Grid>
