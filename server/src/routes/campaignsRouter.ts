@@ -94,7 +94,10 @@ router.get(
 
 /**
  * GET All Campaigns from the `campaign` table with their KPI
- * grouped by day, week, and month
+ * grouped by sets of..
+ * - day, month, and year
+ * - month and year
+ * - year only
  */
 router.get(
   '/:campaignId/kpi/:yearMonthDay',
